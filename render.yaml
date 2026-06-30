@@ -3,6 +3,8 @@ services:
     name: olap-analytics
     runtime: python
     plan: free
+    repo: https://github.com/ibis-frost/olap-analytics
+    branch: main
     rootDir: .
     buildCommand: |
       pip install -r etl/requirements.txt &&
