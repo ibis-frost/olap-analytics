@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: olap-analytics
+    runtime: python
+    plan: free
+    rootDir: .
+    buildCommand: |
+      pip install -r etl/requirements.txt &&
+      pip install -r api/requirements.txt &&
+      python scripts/run_pipeline.py &&
+      cd web &&
+      npm ci &&
+      npm run build
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DUCKDB_PATH
+        value: data/warehouse.duckdb
+      - key: CORS_ORIGINS
+        value: "*"
+    healthCheckPath: /health
